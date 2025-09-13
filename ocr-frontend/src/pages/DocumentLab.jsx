@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import UploadBox from '../components/UploadBox.jsx'
+import UploadBox from '../components/Uploader.jsx'
 
 export default function DocumentLab() {
   const [file, setFile] = useState(null)
