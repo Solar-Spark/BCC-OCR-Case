@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, message, Spin } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { FileTextOutlined, ArrowUpOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
 const API_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000';
@@ -46,19 +46,27 @@ export default function Uploader({ onDone }) {
   return (
     <Spin spinning={loading} tip="Processing file...">
       <Dragger
-        name="file"
-        multiple={false}
-        accept=".pdf,.png,.jpg,.jpeg"
-        beforeUpload={beforeUpload}
-        customRequest={customRequest}
-        showUploadList={false}
-        height={220}
-        style={{ padding: 16 }}
-      >
-        <p className="ant-upload-drag-icon"><InboxOutlined /></p>
-        <p className="ant-upload-text">Drag-and-drop a PDF or JPG/PNG here</p>
-        <p className="ant-upload-hint">or click to upload. Max 20 MB.</p>
-      </Dragger>
+          name="file"
+          multiple={false}
+          accept=".pdf,.png,.jpg,.jpeg"
+          beforeUpload={beforeUpload}
+          customRequest={customRequest}
+          showUploadList={false}
+          className="uploader-card"
+        >
+          <div className="uploader-center">
+            <div className="uploader-illustration">
+              <FileTextOutlined className="doc" />
+              <span className="badge"><ArrowUpOutlined /></span>
+            </div>
+
+            <div className="uploader-text">
+              <div className="title">Drag-and-drop a PDF or JPG/PNG here</div>
+              <div className="subtitle">or click to upload. Max 20 MB.</div>
+            </div>
+          </div>
+        </Dragger>
+
     </Spin>
   );
 }
