@@ -13,6 +13,15 @@ python -m venv .venv
 .\.venv\Scripts\activate
 ```
 
+Создание .env файла
+
+Создайте файл .env в корне проекта с содержимым:
+
+```
+GITHUB_API_KEY=<Ваш ключ GitHub AI API>
+ISGPU=False
+```
+
 ## Установка зависимостей
 
 ```bash
@@ -22,13 +31,13 @@ pip install -r requirements.txt
 Для запуска на CPU
 
 ```bash
-python -m pip install paddlepaddle==3.0.0 -i https://www.paddlepaddle.org.cn/packages/stable/cpu/`
+python -m pip install paddlepaddle
 ```
 
 Для запуска на GPU (CUDA)
 
 ```bash
-python -m pip install paddlepaddle-gpu==3.0.0 -i https://www.paddlepaddle.org.cn/packages/stable/cu118/
+python -m pip install paddlepaddle-gpu
 ```
 
 ## Установка зависимостей Frontend
