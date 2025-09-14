@@ -10,15 +10,9 @@ export default function Uploader({ onDone }) {
 
   const beforeUpload = (file) => {
     const okType = ['application/pdf', 'image/png', 'image/jpeg'].includes(file.type);
-    if (!okType) {
-      message.error('Only PDF, JPG, and PNG files are allowed.');
-      return Upload.LIST_IGNORE;
-    }
+    if (!okType) { message.error('Only PDF, JPG, and PNG files are allowed.'); return Upload.LIST_IGNORE; }
     const okSize = file.size / 1024 / 1024 < 20;
-    if (!okSize) {
-      message.error('File must be smaller than 20MB.');
-      return Upload.LIST_IGNORE;
-    }
+    if (!okSize) { message.error('File must be smaller than 20MB.'); return Upload.LIST_IGNORE; }
     return true;
   };
 
@@ -36,10 +30,8 @@ export default function Uploader({ onDone }) {
         url: `${API_URL}${data.cleaned_url}`,
         mime: data.mime || 'application/octet-stream',
         json: data.fields || null,
-        metrics: data.metrics || null,
         originalName: file.name,
       };
-
       onSuccess?.(data, file);
       onDone?.(result);
     } catch (e) {
