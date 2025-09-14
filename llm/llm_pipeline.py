@@ -82,5 +82,5 @@ def extract_contract_json(text: str) -> dict:
     if result_text.endswith("```"):
         result_text = result_text[:-3].strip()
 
-    # 🔹 Parse JSON safely
+   
     return json.loads(result_text)
