@@ -3,7 +3,7 @@ import cv2
 from skimage import img_as_ubyte
 import numpy as np
 
-ocr = PaddleOCR(lang='ru', use_gpu=True)
+ocr = PaddleOCR(lang='ru')
 
 def ocr_image(image):
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
