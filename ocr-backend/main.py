@@ -36,7 +36,7 @@ async def upload(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, f)
 
     # Create cleaned file (you will process this in real case)
-    cleaned_name = f"cleaned_{file.filename}"
+    cleaned_name = f"preview_of_{file.filename}"
     cleaned_path = CLEANED_DIR / cleaned_name
     shutil.copy(upload_path, cleaned_path)
 
