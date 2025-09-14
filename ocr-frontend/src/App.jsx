@@ -123,23 +123,31 @@ export default function App() {
               extra={<Button size="small" onClick={handleClearHistory}>Clear history</Button>}
             >
               <List
-                size="small"
-                dataSource={history}
-                renderItem={(it) => (
-                  <List.Item
-                    actions={[
-                      <a key="open" onClick={() => handleSelectHistory(it)}>Open</a>,
-                      <a key="download" href={it.url} target="_blank" rel="noreferrer">Download</a>,
-                      <a key="preview" onClick={() => { setResult(it); }}>Preview</a>,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      title={it.originalName || 'Document'}
-                      description={new Date(it.ts).toLocaleString()}
-                    />
-                  </List.Item>
-                )}
-              />
+  size="small"
+  dataSource={history}
+  renderItem={(it) => (
+                <List.Item
+                  actions={[
+                    <Button
+                      key="download"
+                      type="link"
+                      icon={<DownloadOutlined />}
+                      href={it.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Download
+                    </Button>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={it.originalName || 'Document'}
+                    description={new Date(it.ts).toLocaleString()}
+                  />
+                </List.Item>
+              )}
+            />
+
             </Card>
           )}
         </div>
