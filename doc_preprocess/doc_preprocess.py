@@ -38,6 +38,7 @@ def preprocess_document(path):
     pages = convert_pdf_to_images(path)
     images = []
     for page in pages:
-        preprocessed = preprocess_image(page)
+        # preprocessed = preprocess_image(page)
+        preprocessed = page
         images.append(preprocessed)
     return images
