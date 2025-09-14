@@ -1,0 +1,6 @@
+html, body, #root { height: 100%; }
+.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.center { display: grid; place-items: center; }
+.preview { margin-top: 16px; }
+.ant-descriptions-item-label { white-space: nowrap; }
+
