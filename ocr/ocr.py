@@ -15,4 +15,10 @@ def ocr_image(image):
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
     results = ocr.ocr(image)
     texts = results[0]['rec_texts']
-    return "\n".join(texts)
+    return " ".join(texts)
+
+def ocr_images(image_arr):
+    texts = []
+    for image in image_arr:
+        texts.append(ocr_image(image))
+    return " ".join(texts)

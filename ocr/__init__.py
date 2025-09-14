@@ -1,1 +1,1 @@
-from .ocr import ocr_image
+from .ocr import ocr_image, ocr_images

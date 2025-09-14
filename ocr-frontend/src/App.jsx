@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Layout, Typography, Tabs, Card, Space, Button, message, List, Tag, Popconfirm } from 'antd';
 import { CloudUploadOutlined, DeleteOutlined, DownloadOutlined, HistoryOutlined, ReloadOutlined } from '@ant-design/icons';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import Uploader from './components/Uploader.jsx';
 import PreviewPane from './components/PreviewPane.jsx';
 import JsonPane from './components/JsonPane.jsx';
-import MetricsPane from './components/MetricsPane.jsx';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -14,10 +14,9 @@ const HISTORY_KEY = 'ocr-history-v1';
 const CURRENT_KEY = 'ocr-result';
 
 export default function App() {
-  const [result, setResult] = useState(null); // { url, mime, json, metrics, originalName, ts }
+  const [result, setResult] = useState(null); // { url, mime, json, originalName, ts }
   const [history, setHistory] = useState([]);
 
-  // Load persisted current + history (safe parse)
   useEffect(() => {
     try {
       const saved = localStorage.getItem(CURRENT_KEY);
@@ -29,12 +28,11 @@ export default function App() {
     }
   }, []);
 
-  // Persist current
   useEffect(() => {
     try {
       if (result) {
         localStorage.setItem(CURRENT_KEY, JSON.stringify(result));
-        const nextHistory = [result, ...history].slice(0, 8); // store max 8 history
+        const nextHistory = [result, ...history].slice(0, 8);
         setHistory(nextHistory);
         localStorage.setItem(HISTORY_KEY, JSON.stringify(nextHistory));
       }
@@ -55,11 +53,6 @@ export default function App() {
     message.success('Removed from session');
   };
 
-  const handleSelectHistory = (item) => {
-    setResult(item);
-    message.info(`Opened: ${item.originalName || 'Document'}`);
-  };
-
   const handleClearHistory = () => {
     setHistory([]);
     try { localStorage.removeItem(HISTORY_KEY); } catch {}
@@ -71,7 +64,6 @@ export default function App() {
   const tabs = useMemo(() => ([
     { key: 'preview', label: 'Preview', children: <PreviewPane result={result} />, forceRender: true },
     { key: 'json', label: 'JSON (fields)', children: <JsonPane result={result} />, forceRender: true },
-    { key: 'metrics', label: 'Metrics', children: <MetricsPane result={result} />, forceRender: true },
   ]), [result]);
 
   return (
@@ -86,75 +78,76 @@ export default function App() {
 
       <Content>
         <div className="container">
-          <Card>
-            <Uploader onDone={handleOnDone} />
-          </Card>
-
-          {result && (
-            <Card
-              className="preview"
-              title={result.originalName || 'Processed Document'}
-              extra={
-                <Space>
-                  <Button type="default" icon={<ReloadOutlined />} onClick={() => setResult({ ...result })}>
-                    Refresh
-                  </Button>
-                  <Button type="primary" icon={<DownloadOutlined />} href={downloadUrl} target="_blank">
-                    Download
-                  </Button>
-                  <Popconfirm title="Remove current document from session?" onConfirm={handleDeleteCurrent} okText="Remove">
-                    <Button danger icon={<DeleteOutlined />}>Delete</Button>
-                  </Popconfirm>
-                </Space>
-              }
-            >
-              <Tabs
-                defaultActiveKey="preview"
-                destroyInactiveTabPane={false}
-                items={tabs}
-              />
+          <ErrorBoundary>
+            <Card>
+              <Uploader onDone={handleOnDone} />
             </Card>
-          )}
 
-          {history.length > 0 && (
-            <Card
-              title={<><HistoryOutlined /> <span style={{ marginLeft: 8 }}>Recent Documents</span></>}
-              style={{ marginTop: 16 }}
-              extra={<Button size="small" onClick={handleClearHistory}>Clear history</Button>}
-            >
-              <List
-  size="small"
-  dataSource={history}
-  renderItem={(it) => (
-                <List.Item
-                  actions={[
-                    <Button
-                      key="download"
-                      type="link"
-                      icon={<DownloadOutlined />}
-                      href={it.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+            {result && (
+              <Card
+                className="preview"
+                title={result.originalName || 'Processed Document'}
+                extra={
+                  <Space>
+                    <Button type="default" icon={<ReloadOutlined />} onClick={() => setResult({ ...result })}>
+                      Refresh
+                    </Button>
+                    <Button type="primary" icon={<DownloadOutlined />} href={downloadUrl} target="_blank">
                       Download
-                    </Button>,
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={it.originalName || 'Document'}
-                    description={new Date(it.ts).toLocaleString()}
-                  />
-                </List.Item>
-              )}
-            />
+                    </Button>
+                    <Popconfirm title="Remove current document from session?" onConfirm={handleDeleteCurrent} okText="Remove">
+                      <Button danger icon={<DeleteOutlined />}>Delete</Button>
+                    </Popconfirm>
+                  </Space>
+                }
+              >
+                <Tabs
+                  defaultActiveKey="preview"
+                  destroyInactiveTabPane={false}
+                  items={tabs}
+                />
+              </Card>
+            )}
 
-            </Card>
-          )}
+            {history.length > 0 && (
+              <Card
+                title={<><HistoryOutlined /> <span style={{ marginLeft: 8 }}>Recent Documents</span></>}
+                style={{ marginTop: 16 }}
+                extra={<Button size="small" onClick={handleClearHistory}>Clear history</Button>}
+              >
+                <List
+                  size="small"
+                  dataSource={history}
+                  renderItem={(it) => (
+                    <List.Item
+                      actions={[
+                        <Button
+                          key="download"
+                          type="link"
+                          icon={<DownloadOutlined />}
+                          href={it.url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Download
+                        </Button>,
+                      ]}
+                    >
+                      <List.Item.Meta
+                        title={it.originalName || 'Document'}
+                        description={new Date(it.ts).toLocaleString()}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </Card>
+            )}
+          </ErrorBoundary>
         </div>
       </Content>
 
       <Footer className="center">
-        <Text type="secondary">© {new Date().getFullYear()} OCR Demo</Text>
+        <Text type="secondary">© {new Date().getFullYear()} OCR Demo Team Solar Spark</Text>
       </Footer>
     </Layout>
   );

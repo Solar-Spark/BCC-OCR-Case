@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, message, Spin } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { FileTextOutlined, ArrowUpOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
 const API_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000';
@@ -10,15 +10,9 @@ export default function Uploader({ onDone }) {
 
   const beforeUpload = (file) => {
     const okType = ['application/pdf', 'image/png', 'image/jpeg'].includes(file.type);
-    if (!okType) {
-      message.error('Only PDF, JPG, and PNG files are allowed.');
-      return Upload.LIST_IGNORE;
-    }
+    if (!okType) { message.error('Only PDF, JPG, and PNG files are allowed.'); return Upload.LIST_IGNORE; }
     const okSize = file.size / 1024 / 1024 < 20;
-    if (!okSize) {
-      message.error('File must be smaller than 20MB.');
-      return Upload.LIST_IGNORE;
-    }
+    if (!okSize) { message.error('File must be smaller than 20MB.'); return Upload.LIST_IGNORE; }
     return true;
   };
 
@@ -36,10 +30,8 @@ export default function Uploader({ onDone }) {
         url: `${API_URL}${data.cleaned_url}`,
         mime: data.mime || 'application/octet-stream',
         json: data.fields || null,
-        metrics: data.metrics || null,
         originalName: file.name,
       };
-
       onSuccess?.(data, file);
       onDone?.(result);
     } catch (e) {
@@ -60,13 +52,21 @@ export default function Uploader({ onDone }) {
         beforeUpload={beforeUpload}
         customRequest={customRequest}
         showUploadList={false}
-        height={220}
-        style={{ padding: 16 }}
+        className="uploader-card"
       >
-        <p className="ant-upload-drag-icon"><InboxOutlined /></p>
-        <p className="ant-upload-text">Drag-and-drop a PDF or JPG/PNG here</p>
-        <p className="ant-upload-hint">or click to upload. Max 20 MB.</p>
+        <div className="uploader-center">
+          <div className="uploader-illustration">
+            <FileTextOutlined className="doc" />
+            <span className="badge"><ArrowUpOutlined /></span>
+          </div>
+
+          <div className="uploader-text">
+            <div className="title">Drag-and-drop a PDF or JPG/PNG here</div>
+            <div className="subtitle">or click to upload. Max 20 MB.</div>
+          </div>
+        </div>
       </Dragger>
+
     </Spin>
   );
 }
