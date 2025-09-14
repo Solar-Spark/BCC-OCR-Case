@@ -80,7 +80,6 @@ export default function App() {
         <div className="container" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <CloudUploadOutlined style={{ fontSize: 24 }} />
           <Title level={4} style={{ margin: 0 }}>OCR 2.0 Demo</Title>
-          <Text type="secondary" style={{ marginLeft: 8 }}>Ant Design Frontend</Text>
           <Tag color="blue" style={{ marginLeft: 'auto' }}>API: {API_URL}</Tag>
         </div>
       </Header>
