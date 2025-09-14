@@ -1,49 +1,42 @@
 # Установка проекта
 
-## Клонирование репозитория
+Клонирование репозитория
 
 `git clone https://github.com/Solar-Spark/BCC-OCR-Case.git`
 
-## Создание и активация виртуального окружения
-`
-python -m venv .venv
-.\.venv\Scripts\activate
-`
+Создание и активация виртуального окружения
+
+`python -m venv .venv`
+`.\.venv\Scripts\activate`
 
 ## Установка зависимостей
 
 `pip install -r requirements.txt`
 
-### Для запуска на CPU
+Для запуска на CPU
 
 `python -m pip install paddlepaddle==3.0.0 -i https://www.paddlepaddle.org.cn/packages/stable/cpu/`
 
-### Для запуска на GPU (CUDA)
+Для запуска на GPU (CUDA)
 
 `python -m pip install paddlepaddle-gpu==3.0.0 -i https://www.paddlepaddle.org.cn/packages/stable/cu118/`
 
 ## Установка зависимостей Frontend
 
-`
-cd ocr-frontend
-npm install
-`
+`cd ocr-frontend`
+`npm install`
 
 # Запуск проекта
 
-## Backend
+Backend
 
-`
-cd ocr-backend
-uvicorn main:app --reload
-`
+`cd ocr-backend`
+`uvicorn main:app --reload`
 
-## Frontend
+Frontend
 
-`
-cd ocr-frontend
-npm run dev
-`
+`cd ocr-frontend`
+`npm run dev`
 
 ### Адрес Frontend
 `localhost:5173`
